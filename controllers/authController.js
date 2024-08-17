@@ -2,24 +2,22 @@
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { getDB } = require('../config/db');
 require('dotenv').config();
 
-const db = getDB();
+const { User } = require("../models/User")
 
 // Register a new user
 exports.register = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const usersCollection = db.collection('users');
-    const existingUser = await usersCollection.findOne({ email });
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ success: false, message: 'User already exists' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const result = await usersCollection.insertOne({ email, password: hashedPassword });
+    const result = await User.insertOne({ email, password: hashedPassword });
 
     const token = jwt.sign({ id: result.insertedId }, process.env.JWT_SECRET, {
       expiresIn: '1h',
@@ -36,8 +34,8 @@ exports.login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const usersCollection = db.collection('users');
-    const user = await usersCollection.findOne({ email });
+
+    const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ success: false, message: 'Invalid credentials' });
     }
