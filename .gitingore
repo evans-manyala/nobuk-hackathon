@@ -1,0 +1,15 @@
+# Node.js dependencies
+node_modules/
+
+# Environment variables
+.env
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Optional: OS-specific files (e.g., macOS)
+.DS_Store
+
+# Optional: Other files or directories you want to exclude
