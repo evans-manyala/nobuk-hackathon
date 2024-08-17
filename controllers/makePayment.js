@@ -2,9 +2,12 @@ const axios = require("axios");
 const { userToken } = require("../utils/token");
 
 const makePayment = async (req, res) => {
-    const { pay_amount, pay_number, pay_name } = req.body
+  const { pay_amount, pay_number, pay_name } = req.body;
 
-    if(!pay_amount | !pay_number  | !pay_name) return res.status(400).send({ error: "Please provide all the required fields" })
+  if (!pay_amount | !pay_number | !pay_name)
+    return res
+      .status(400)
+      .send({ error: "Please provide all the required fields" });
 
   try {
     let data = JSON.stringify({
@@ -16,7 +19,7 @@ const makePayment = async (req, res) => {
       pay_name: pay_name,
       pay_type: "MPESA",
       multi_names: false,
-      pay_details: "Test Payments"
+      pay_details: "Test Payments",
     });
 
     let config = {
@@ -34,11 +37,11 @@ const makePayment = async (req, res) => {
       .request(config)
       .then((response) => {
         console.log(JSON.stringify(response.data));
-        return res.send(response.data).status(200)
+        return res.send(response.data).status(200);
       })
       .catch((error) => {
         console.log(error);
-        return res.status(500).send({ error: error.message })
+        return res.status(500).send({ error: error.message });
       });
   } catch (error) {
     console.log(error);
@@ -46,5 +49,4 @@ const makePayment = async (req, res) => {
   }
 };
 
-
-module.exports = { makePayment }
+module.exports = { makePayment };
